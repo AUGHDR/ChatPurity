@@ -1,3 +1,5 @@
+Modrinth:https://modrinth.com/mod/chatpurity
+MC百科:https://www.mcmod.cn/class/24956.html
 ChatPurity 聊天过滤
 
 一个专为中国 MC 社区设计的服务器聊天净化模组，超多配置、超强检测，包括白名单、黑名单、谐音、单字检测、替换等功能。
