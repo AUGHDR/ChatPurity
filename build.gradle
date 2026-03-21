@@ -1,0 +1,60 @@
+plugins {
+    id 'dev.kikugie.stonecutter'
+    id 'fabric-loom' version '1.13.+'
+}
+
+def mcVersion = stonecutter.current.version
+def versionProps = new Properties()
+
+// Stonecutter 会为每个版本创建子项目，工作目录在 versions/{version}/
+file("gradle.properties").withInputStream { versionProps.load(it) }
+
+// 根据版本生成版本范围标识
+def versionRange = (mcVersion.startsWith("1.20")) ? ">=1.20,<1.21" : ">=1.21,<1.22"
+version = "${versionProps.getProperty('mod_version')}+${mcVersion}"
+group = versionProps.getProperty('maven_group')
+
+def baseName = versionProps.getProperty('archives_base_name')
+base {
+    archivesName = "${baseName}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${mcVersion}"
+    mappings "net.fabricmc:yarn:${versionProps.getProperty('yarn_mappings')}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${versionProps.getProperty('loader_version')}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${versionProps.getProperty('fabric_version')}"
+    
+    def snakeyaml = versionProps.getProperty('snakeyaml_version', '2.2')
+    implementation "org.yaml:snakeyaml:${snakeyaml}"
+    include "org.yaml:snakeyaml:${snakeyaml}"
+}
+
+processResources {
+    inputs.property "version", version
+    inputs.property "mcVersion", mcVersion
+    inputs.property "mcVersionRange", versionRange
+    
+    filesMatching("fabric.mod.json") {
+        expand "version": version, "mcVersion": mcVersion, "mcVersionRange": versionRange
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+remapJar {
+    def series = (mcVersion.startsWith("1.20")) ? "1.20.x" : "1.21.x"
+    archiveFileName = "${baseName}-${versionProps.getProperty('mod_version')}+${series}.jar"
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
