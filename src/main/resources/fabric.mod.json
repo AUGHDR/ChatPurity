@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "chatpurity",
+  "version": "${version}",
+  "name": "ChatPurity-Fabric",
+  "description": "A powerful and simple Minecraft Fabric mod for chat filtering with whitelist, blacklist, word replacement, and anti-spam features.",
+  "authors": ["AUGUHDAR"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/chatpurity",
+    "sources": "https://github.com/AUGHDR/ChatPurity",
+    "issues": "https://github.com/AUGHDR/ChatPurity/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/chatpurity/pack.png",
+  "environment": "server",
+  "entrypoints": {
+    "main": ["com.chatpurity.ChatPurityMod"]
+  },
+  "mixins": ["chatpurity.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "minecraft": "${mcVersionRange}",
+    "fabric-api": "*"
+  }
+}
